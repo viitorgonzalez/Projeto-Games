@@ -45,7 +45,7 @@ public class Game {
 		this.genres = null;
 	}
 	
-	public Game(/*to do genres and languages*/int app_id, String name, String owners, int age, float price, int dlcs, String website, boolean windows, boolean mac, boolean linux, float upvotes, int avg_pt, String developers){
+	public Game(int app_id, String name, String owners, int age, float price, int dlcs, String website, boolean windows, boolean mac, boolean linux, float upvotes, int avg_pt, String developers){
 		this.app_id = app_id;
 		this.name = name;
 		this.owners = owners;
@@ -219,7 +219,7 @@ public class Game {
 
 	//imprime na tela todos os atributos privados
 	public void imprimir(){
-		MyIO.println(this.app_id + " " + this.name + " " + dateFormat.format(this.release_date) + " " + this.owners + " " + this. age + " " + this. price + " " + this.dlcs + printarLinguas() + this.website + " " + this.windows + " " + this.mac + " " + this.linux + " " + this.upvotes + " " + this.avg_pt + " " + this.developers + printarGenres());
+		MyIO.println(this.app_id + " " + this.name + " " + dateFormat.format(this.release_date) + " " + this.owners + " " + this. age + " " + this. price + " " + this.dlcs + printarLinguas() + this.website + " " + this.windows + " " + this.mac + " " + this.linux + " " + Math.round(this.upvotes) + "% " + printarTime() + " " + this.developers + printarGenres());
 	}
 
 	//lê o arquivo csv
@@ -246,11 +246,15 @@ public class Game {
 		String name = conteudo.substring(first_index, last_index);
 		this.name = name;
 		
+		System.err.println(this.name);
+
 		//tratamento do Date
 		first_index = ++last_index;
 		last_index = conteudo.indexOf(",", first_index);
 
 		String release_date = conteudo.substring(first_index, last_index);
+
+		System.err.println("release_date: " + release_date);
 
 		//tentando capturar datas com apenas mes e ano (primeiro caso)
 		try{
@@ -296,8 +300,18 @@ public class Game {
 		this.dlcs = Integer.parseInt(dlcs);
 
 		//tratamento das languages
-		first_index = conteudo.indexOf("[");
-		last_index = conteudo.indexOf("]");
+
+
+
+		first_index = conteudo.indexOf("[", first_index);
+		System.err.println("charAt: " + conteudo.charAt(first_index));
+		if(conteudo.charAt(first_index - 1) == '\"'){
+			last_index = conteudo.indexOf("]\"", first_index);
+		} else {
+			last_index = conteudo.indexOf("]", first_index);
+		}
+
+
 
 		String tmp = conteudo.substring(first_index + 1, last_index);
 		String[] languages = tmp.split(",");
@@ -307,21 +321,37 @@ public class Game {
 			languages[i] = (temp.replaceAll("'", ""));
 		}			
 
+		last_index = conteudo.indexOf(",", last_index); //procura virgula após ]
+
 		this.languages = languages;
 		  
 		//tratamento do website
-		first_index = last_index += 2;
-		last_index = conteudo.indexOf(",", first_index);
+		first_index = ++last_index;
+
+		if(conteudo.charAt(first_index) == '\"'){
+			last_index = conteudo.indexOf("\"", first_index + 1); //pesquisa a próxima aspas no nome do jogo
+			last_index++; //pular para poder chegar na virgula
+		} else {
+			last_index = conteudo.indexOf(",", first_index); //caso não tenha virgula, trate normalmente
+		}		
 
 		String website = conteudo.substring(first_index, last_index);	
 		this.website = website;
 
+		//debug
+		System.err.println("website: " + first_index + " " + last_index);
+
+
+		
  		//tratamento do windows
 		first_index = ++last_index;
 		last_index = conteudo.indexOf(",", first_index);
 
 		String windows = conteudo.substring(first_index, last_index);	
 		this.windows = Boolean.parseBoolean(windows);
+
+		//debug
+		System.err.println("windows: " + first_index + " " + last_index);
 
 		//tratamento do mac
 		first_index = ++last_index;
@@ -338,16 +368,42 @@ public class Game {
 		this.linux = Boolean.parseBoolean(linux);
 
 	   //tratamento do upvotes
+	   first_index = ++last_index;
+	   last_index = conteudo.indexOf(",", first_index);
+	   float A = 0;
+	   float B = 0;
+
+		//ler a
+		String a = conteudo.substring(first_index, last_index);	
+		try{
+			A = Float.parseFloat(a);
+		} catch (Exception e){
+			e.printStackTrace(); //mostra erro
+			System.err.println(a);
+			System.err.println(first_index + " " + last_index);
+			System.err.println(this.windows);
+			System.exit(0);
+		}
+
+		//avança para ler b
 		first_index = ++last_index;
 		last_index = conteudo.indexOf(",", first_index);
+		
+		//ler b
+		String b = conteudo.substring(first_index, last_index);
+		try{
+			B = Float.parseFloat(b);
+		} catch (Exception e){ //mostra erro
+			e.printStackTrace();
+			System.err.println(b);
+			System.err.println(this.name);
+			System.exit(0);
+		}
 
-		// a / (a + b) == upvotes
+		float upvotes = (A / (A + B) * 100); //formula para transformar em porcentagem
+		this.upvotes = upvotes;
 
-		String upvotes = conteudo.substring(first_index, last_index);	
-		this.upvotes = Float.parseFloat(upvotes);
-	
-
-	/*	//tratamento do avg_pt
+		//tratamento do avg_pt
 		first_index = ++last_index;
 		last_index = conteudo.indexOf(",", first_index);
 
@@ -373,8 +429,7 @@ public class Game {
 			genres[i] = (temp2.replaceAll("'", ""));
 		}
 
-		this.genres = genres; 
-		*/
+		this.genres = genres;
 	}	
 	
 	public String printarLinguas(){
@@ -396,6 +451,10 @@ public class Game {
 	public String printarGenres(){
 		String s = " [";
 
+		if(genres == null){
+			return "[null]";
+		}
+
 		for(int i = 0; i < genres.length; i++){
 			s += genres[i];
 
@@ -407,6 +466,15 @@ public class Game {
 		s += "] ";
 
 		return s;
+	}
+
+	public String printarTimeHoras(){
+		String tmp;
+		String timeFinish = "";
+
+		//fazer lógica para printar o horario no formato 5h 34m
+
+		return timeFinish;
 	}
 
 	//lê pub.in
