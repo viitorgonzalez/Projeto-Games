@@ -411,8 +411,8 @@ public class Game {
 		String developers = conteudo.substring(first_index, last_index);
 
 		this.developers = developers;
+
 	 	//tratamento dos genres
-		
 		try{
 			first_index = conteudo.indexOf("\"", first_index);
 			last_index = conteudo.indexOf("\"", first_index);
@@ -430,7 +430,7 @@ public class Game {
 		try{
 			tmp3 = conteudo.substring(first_index, last_index);
 		}catch (Exception e){
-			e.printStackTrace();
+			System.err.println(this.developers);
 		}
 		String[] genres = new String[1];
 
@@ -445,7 +445,7 @@ public class Game {
 			genres[i] = (temp3.replaceAll("'", ""));
 		}			
  
-		last_index = conteudo.indexOf(",", last_index); //procura virgula após ]
+		last_index = conteudo.indexOf(",", last_index); 
  
 		 this.genres = genres;	
 		}	
