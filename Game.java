@@ -413,6 +413,7 @@ public class Game {
 		this.developers = developers;
 
 	 	//tratamento dos genres
+
 		try{
 			first_index = conteudo.indexOf("\"", first_index);
 			last_index = conteudo.indexOf("\"", first_index);
@@ -422,17 +423,22 @@ public class Game {
 				last_index = conteudo.indexOf(",", first_index);
 			}catch (Exception e2){
 				e.printStackTrace();
+
 			}
 		}
 
 		String tmp3 = "";
+		String[] genres = new String[1];
 
 		try{
-			tmp3 = conteudo.substring(first_index, last_index);
+			//fazer debug aqui
+			tmp3 = conteudo.substring(first_index + 1, last_index);
 		}catch (Exception e){
-			System.err.println(this.developers);
+			//crash here
+			e.printStackTrace(); 
+			System.err.println("first: " + first_index + "last: " + last_index );
+			System.err.println(this.name);
 		}
-		String[] genres = new String[1];
 
 		try{
 			genres = tmp3.split(",");
@@ -443,11 +449,12 @@ public class Game {
 		for(int i = 0; i < genres.length; i++){
 			String temp3 = (genres[i].trim().substring(0,genres[i].trim().length()));
 			genres[i] = (temp3.replaceAll("'", ""));
+
 		}			
  
 		last_index = conteudo.indexOf(",", last_index); 
- 
-		 this.genres = genres;	
+
+		this.genres = genres;	
 		}	
 	
 	public String printarLinguas(){
@@ -473,7 +480,7 @@ public class Game {
 		for(int i = 0; i < genres.length; i++){  
 		 	s += genres[i];
 
-		 	if(i < genres.length - 1){
+		 	if(i != genres.length - 1){
 				s += ", ";
 		 	}
 		}
