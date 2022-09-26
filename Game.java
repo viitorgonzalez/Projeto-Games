@@ -3,10 +3,10 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 
 public class Game {
-
+	
 	private int app_id;
-	private	String name;
-	private Date release_date = new Date();
+	private String name;
+	private Date release_date;
 	private String owners;
 	private int age;
 	private float price;
@@ -365,8 +365,6 @@ public class Game {
 		} catch (Exception e){
 			e.printStackTrace(); //mostra erro
 			System.err.println(a);
-			System.err.println(first_index + " " + last_index);
-			System.err.println(this.windows);
 			System.exit(0);
 		}
 
@@ -409,21 +407,18 @@ public class Game {
 		}
 
 		String developers = conteudo.substring(first_index, last_index);
-
 		this.developers = developers;
 
 	 	//tratamento dos genres
-
 		try{
-			first_index = conteudo.indexOf("\"", first_index);
-			last_index = conteudo.indexOf("\"", first_index);
+			first_index = conteudo.indexOf("\"", last_index + 1);
+			last_index = conteudo.indexOf("\"", first_index + 1);
 		}catch (Exception e){
 			try{
 				first_index = ++last_index;
-				last_index = conteudo.indexOf(",", first_index);
+				//last_index = conteudo.length();
 			}catch (Exception e2){
 				e.printStackTrace();
-
 			}
 		}
 
