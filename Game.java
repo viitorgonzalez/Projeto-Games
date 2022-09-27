@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 
 public class Game {
 	
+	//variaveis
 	private int app_id;
 	private String name;
 	private Date release_date;
@@ -21,6 +22,7 @@ public class Game {
 	private String developers;
 	private String[] genres = new String[1000];
 
+	//formatação para data
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM/yyyy", Locale.US);
 	static int cont = 0;
 
@@ -193,6 +195,7 @@ public class Game {
 
 	//CLONE	
 	public Game clonar(){
+		
 		Game gameCloned = new Game();
 
 		gameCloned.app_id = this.app_id;
@@ -416,7 +419,6 @@ public class Game {
 		}catch (Exception e){
 			try{
 				first_index = ++last_index;
-				//last_index = conteudo.length();
 			}catch (Exception e2){
 				e.printStackTrace();
 			}
@@ -426,7 +428,6 @@ public class Game {
 		String[] genres = new String[1];
 
 		try{
-			//fazer debug aqui
 			tmp3 = conteudo.substring(first_index + 1, last_index);
 		}catch (Exception e){
 			//crash here
@@ -452,6 +453,7 @@ public class Game {
 		this.genres = genres;	
 		}	
 	
+	//formata saida de languages
 	public String printarLinguas(){
 		String s = " [";
 
@@ -468,6 +470,7 @@ public class Game {
 		return s;
 	}
 
+	//formata saida de genres
 	public String printarGenres(){
 	
 		String s = " [";
@@ -485,6 +488,7 @@ public class Game {
 		return s;
 	}
 
+	//formata saida do release_date
 	public String printarTime(int avg_pt){
 		int horas, minutos;
 		String timeFinish = "";
@@ -500,17 +504,21 @@ public class Game {
 		return timeFinish;
 	}
 
-	//lê pub.in
-	public static boolean isFim(String entrada){  //Funcao para terminar a execucao do programa ao ser lido "FIM"
+	//Funcao para terminar a execucao do programa ao ser lido "FIM"
+	public static boolean isFim(String entrada){  
 		boolean isFim = true;
 
-		if(entrada.equals("FIM")){ //verifica
+		//verifica
+		if(entrada.equals("FIM")){ 
 				isFim = false;
 		}
+
 		return isFim;
 	}
 
+	//lê o arquivo game.csv
 	public static Game[] lerArquivoCsv() throws Exception{
+
 		Game[] games = new Game[5000];
 		Scanner scanner = new Scanner(new File("/tmp/games.csv")); //entrada pelo arquivo games.csv
 		String entrada = new String();
@@ -529,6 +537,7 @@ public class Game {
 
 	//MAIN
 	 public static void main(String[] args) throws Exception{
+
 		String entrada = MyIO.readLine();
 
 		Game[] games = lerArquivoCsv();
@@ -544,9 +553,26 @@ public class Game {
 			}
 			
 			entrada = MyIO.readLine();
-			
 	    }	
-
-
 	}
+}
+
+/*
+ * fazer uma função para cada tratamento na função ler()
+ */
+
+class ListaPesquisaSequencial{
+/*
+ * fazer lógica
+ */
+
+}
+
+class Main{
+/*
+ * trazer a main para esta classe
+ * preparar para o 2° FIM (Sao entradas diferentes, primeiro id dps nome do jogo)
+ * 
+ */
+
 }
