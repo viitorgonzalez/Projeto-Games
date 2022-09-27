@@ -1,6 +1,6 @@
-/*
+/**
 * ========================================*
-* Aluno: Vítor Silva Pastor Gonzalez
+* @author: Vítor Silva Pastor Gonzalez
 * Matrícula: 763659
 * 2022
 * PUC-Minas
@@ -65,6 +65,21 @@ public  Game(){
 	this.genres = null;
 }
 
+/**
+ * @param app_id
+ * @param name
+ * @param owners
+ * @param age
+ * @param price
+ * @param dlcs
+ * @param website
+ * @param windows
+ * @param mac
+ * @param linux
+ * @param upvotes
+ * @param avg_pt
+ * @param developers
+ */
 public Game(int app_id, String name, String owners, int age, float price, int dlcs, String website, boolean windows, boolean mac, boolean linux, float upvotes, int avg_pt, String developers){
 	
 	this.app_id = app_id;
@@ -215,7 +230,9 @@ public String[] getGenres(){
 }
 
 //CLONE
-
+/**
+ * @return
+ */
 public Game clonar(){
 	
 	Game gameCloned = new Game();
@@ -246,6 +263,10 @@ public void imprimir(){
 }
 
 //lê o arquivo csv
+/**
+ * @param conteudo
+ * @throws Exception
+ */
 public void ler(String conteudo) throws Exception{
 	//tratamento do app_id
 	int first_index = 0;
