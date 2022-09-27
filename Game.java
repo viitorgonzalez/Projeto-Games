@@ -564,7 +564,6 @@ public static String lerArquivoCsv(String app_id) throws Exception{
 * ========================================*
 */
 
-
 class ListaPesquisaSequencial{
 
 //DECLARAÇÃO de VARIAVEIS
@@ -611,7 +610,12 @@ public void inserirFim(String txt) throws Exception {
 	return resp;
 	}
 
-	//pesquisa 
+	//PESQUISA	
+	/**
+	 * @param games
+	 * @param entrada
+	 * @return
+	 */
 	public static boolean pesquisaSequencial(ArrayList<Game> games, String entrada){
 	
 		boolean resp = false;
@@ -636,10 +640,14 @@ public void inserirFim(String txt) throws Exception {
 class Main{
 
 	public static BufferedReader bufferReader = new BufferedReader(new InputStreamReader(System.in));
-	
+
+	/**
+	 * 
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception{
 
-		//lendo e criando referencia para o objeto Game
 
 		ArrayList<Game> games = new ArrayList<>();
         String entrada = bufferReader.readLine();
