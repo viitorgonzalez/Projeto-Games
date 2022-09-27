@@ -1,6 +1,23 @@
+/*
+ * ========================================*
+ * Aluno: Vítor Silva Psstor Gonzalez
+ * Matrícula: 763659
+ * 2022
+ * PUC-Minas
+ * ========================================*
+ */
+
+//IMPORTS
+
 import java.util.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
+
+/*
+ *=========================================*
+ *            CLASS GAME
+ * ========================================*
+ */
 
 public class Game {
 	
@@ -28,6 +45,7 @@ public class Game {
 
 	//CONSTRUTORES
 	public  Game(){
+
 		this.app_id = -1;
 		this.name = "admin";
 		this.owners = "admin";
@@ -46,6 +64,7 @@ public class Game {
 	}
 	
 	public Game(int app_id, String name, String owners, int age, float price, int dlcs, String website, boolean windows, boolean mac, boolean linux, float upvotes, int avg_pt, String developers){
+		
 		this.app_id = app_id;
 		this.name = name;
 		this.owners = owners;
@@ -193,7 +212,8 @@ public class Game {
 		return this.genres;
 	}
 
-	//CLONE	
+ 	//CLONE
+
 	public Game clonar(){
 		
 		Game gameCloned = new Game();
@@ -558,21 +578,35 @@ public class Game {
 }
 
 /*
- * fazer uma função para cada tratamento na função ler()
- */
+* fazer uma função para cada tratamento na função ler()
+*/
+
+
+/*
+*=========================================*
+*      CLASS ListaPesquisaSequencial
+* ========================================*
+*/
+
 
 class ListaPesquisaSequencial{
-/*
- * fazer lógica
- */
-
+	/*
+	* fazer lógica
+	*/
+	
 }
 
-class Main{
 /*
- * trazer a main para esta classe
- * preparar para o 2° FIM (Sao entradas diferentes, primeiro id dps nome do jogo)
- * 
+ *=========================================*
+ *            CLASS MAIN
+ * ========================================*
  */
 
+class Main{
+	/*
+	* trazer a main para esta classe
+	* preparar para o 2° FIM (Sao entradas diferentes, primeiro id dps nome do jogo)
+	* 
+	*/
+	
 }
