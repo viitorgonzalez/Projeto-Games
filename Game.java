@@ -10,7 +10,9 @@
 //IMPORTS
 
 import java.util.*;
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 
 /*
@@ -19,7 +21,7 @@ import java.text.SimpleDateFormat;
 * ========================================*
 */
 
-public class Game {
+class Game {
 
 //variaveis
 private int app_id;
@@ -537,51 +539,24 @@ public static boolean isFim(String entrada){
 }
 
 //lê o arquivo game.csv
-public static Game[] lerArquivoCsv() throws Exception{
+public static String lerArquivoCsv(String app_id) throws Exception{
 
-	Game[] games = new Game[5000];
-	Scanner scanner = new Scanner(new File("/tmp/games.csv")); //entrada pelo arquivo games.csv
-	String entrada = new String();
+	BufferedReader br = new BufferedReader(new FileReader("/tmp/games.csv"));
 
-	//lê até acabar o arquivo
-	while(scanner.hasNext()){
-		entrada = scanner.nextLine(); //lê csv
-		Game objeto = new Game(); 
+        String line = "";
 
-		objeto.ler(entrada);	//tratamento para transformar em conteudo do jogo
-		games[cont++] = objeto; //adiciona jogo para o array
+        while ((line = br.readLine()) != null) 
+            if (line.contains(app_id)) 
+                return line;
+            
+        return line;
 	}
-
-return games;
-}
-
-//MAIN
-	public static void main(String[] args) throws Exception{
-
-	String entrada = MyIO.readLine();
-
-	Game[] games = lerArquivoCsv();
-
-	while(isFim(entrada)){
-		
-		int app_id = Integer.parseInt(entrada);
-
-		for(int i = 0; i < cont; i++){
-			if(games[i].app_id == app_id){
-				games[i].imprimir();
-			}
-		}
-		
-		entrada = MyIO.readLine();
-	}	
-}
 }
 
 /*
-* to do: fazer uma função para cada tratamento da função ler(),
+* to do in 'Game': fazer uma função para cada tratamento da função ler(),
 * alterando também caso necessário o método lerArquivoCsv.
 */
-
 
 /*
 *=========================================*
@@ -593,7 +568,7 @@ return games;
 class ListaPesquisaSequencial{
 
 //DECLARAÇÃO de VARIAVEIS
-private int[] array;
+private String[] array;
 private int n;
 
 //CONSTRUTORES
@@ -602,31 +577,31 @@ public ListaPesquisaSequencial (int codigo) {
 	}
 
 public ListaPesquisaSequencial (){
-array = new int[5000];
-n = 0;
+	array = new String[5000];
+	n = 0;
 }
 
 //INSERIR NO FIM
-public void inserirFim(int num) throws Exception {
+public void inserirFim(String txt) throws Exception {
 
 	//validar insercao
 	if(n >= array.length){
 		throw new Exception("Erro ao inserir!");
 	}
 
-	array[n] = num;
+	array[n] = txt;
 	n++;
 	}
 
 	//REMOVER
-	public int remover(int pos) throws Exception {
+	public String remover(int pos) throws Exception {
 
 	//validar remoção
 	if (n == 0 || pos < 0 || pos >= n) {
 		throw new Exception("Erro ao remover!");
 	}
 
-	int resp = array[pos];
+	String resp = array[pos];
 	n--;
 
 	for(int i = pos; i < n; i++){
@@ -634,6 +609,21 @@ public void inserirFim(int num) throws Exception {
 	}
 
 	return resp;
+	}
+
+	//pesquisa 
+	public static boolean pesquisaSequencial(ArrayList<Game> games, String entrada){
+	
+		boolean resp = false;
+
+		for(int i = 0; i < games.size(); i++){
+			int n = 0;
+
+			if(entrada.equals(games.get(i).getName()))
+				resp = true;
+		}
+
+		return resp;
 	}
 }
 
@@ -644,10 +634,39 @@ public void inserirFim(int num) throws Exception {
 */
 
 class Main{
-/*
-* trazer a main para esta classe
-* preparar para o 2° FIM (Sao entradas diferentes, primeiro id dps nome do jogo)
-* 
-*/
 
+	public static BufferedReader bufferReader = new BufferedReader(new InputStreamReader(System.in));
+	
+	public static void main(String[] args) throws Exception{
+
+		//lendo e criando referencia para o objeto Game
+
+		ArrayList<Game> games = new ArrayList<>();
+        String entrada = bufferReader.readLine();
+
+        while(!entrada.equals("FIM")) {
+
+            String gameLine = Game.lerArquivoCsv(entrada);
+            
+            Game g = new Game();
+            g.ler(gameLine);
+            games.add(g);
+
+            entrada = bufferReader.readLine();
+        }
+    
+        entrada = bufferReader.readLine();
+
+        while(!entrada.equals("FIM")) {
+
+            boolean resultado = ListaPesquisaSequencial.pesquisaSequencial(games, entrada);
+
+            if(resultado)
+                System.out.println("SIM");
+            else 
+                System.out.println("NAO");
+            
+            entrada = bufferReader.readLine();
+        }
+	}
 }
