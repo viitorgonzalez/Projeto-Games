@@ -603,6 +603,23 @@ class Lista {
 		n = 0;
 	}
 
+	// INSERIR NO INICIO
+	public void inserirInicio(Game game) throws Exception {
+
+		// validar insercao
+		if (n >= array.length) {
+			throw new Exception("Erro ao inserir!");
+		}
+
+		// levar elementos para o fim do array
+		for (int i = n; i > 0; i--) {
+			array[i] = array[i - 1];
+		}
+
+		array[0] = game;
+		n++;
+	}
+
 	// INSERIR NO FIM
 	public void inserirFim(Game game) throws Exception {
 
@@ -614,6 +631,52 @@ class Lista {
 		array[n] = game;
 		// contar numero de inserções
 		n++;
+	}
+
+	// INSERIR NA POSIÇÃO DESEJADA
+	public void inserir(Game game, int pos) throws Exception {
+
+		// validar insercao
+		if (n >= array.length || pos < 0 || pos > n) {
+			throw new Exception("Erro ao inserir!");
+		}
+
+		// levar elementos para o fim do array
+		for (int i = n; i > pos; i--) {
+			array[i] = array[i - 1];
+		}
+
+		array[pos] = game;
+		n++;
+	}
+
+	// REMOVER NO INICIO
+	public Game removerInicio() throws Exception {
+
+		// validar remocao
+		if (n == 0) {
+			throw new Exception("Erro ao remover!");
+		}
+
+		Game resp = array[0];
+		n--;
+
+		for (int i = 0; i < n; i++) {
+			array[i] = array[i + 1];
+		}
+
+		return resp;
+	}
+
+	// REMOVER NO FIM
+	public Game removerFim() throws Exception {
+
+		// validar remocao
+		if (n == 0) {
+			throw new Exception("Erro ao remover!");
+		}
+
+		return array[--n];
 	}
 
 	// REMOVER
@@ -671,12 +734,18 @@ class Lista {
 		return resp;
 	}
 
+	/**
+	 * @param entrada
+	 * @param esq
+	 * @param dir
+	 * @return
+	 */
 	public boolean pesquisaBinariaRecursiva(String entrada, int esq, int dir) {
 
 		boolean resp;
 		int meio = (esq + dir) / 2;
 
-		//BUUBLESORT
+		// BUUBLESORT
 		if (esq > dir) {
 			resp = false;
 		} else if (entrada.compareTo(array[meio].getName()) == 0) {
@@ -697,7 +766,8 @@ class Lista {
 	public void imprimirLista() {
 
 		for (int i = 0; i < n; i++) {
-			System.out.println(array[i].getName());
+			System.out.printf("[%d] ", i);
+			array[i].imprimir();
 		}
 	}
 }
@@ -710,6 +780,29 @@ class Lista {
 
 class Main {
 
+	public static String pesquisarGame(String id) throws Exception {
+
+		BufferedReader br = new BufferedReader(new FileReader("games.csv"));
+
+		String linha = br.readLine();
+
+		while(linha != null) {
+			if(encontrarId(linha).equals(id)) {
+				break;
+			}
+
+			linha = br.readLine();
+		}
+
+		br.close();
+
+		return linha;
+	}
+
+	public static String encontrarId(String string) {
+		return string.substring(0, string.indexOf(','));
+	}
+
 	public static BufferedReader bufferReader = new BufferedReader(new InputStreamReader(System.in));
 
 	/**
@@ -720,6 +813,7 @@ class Main {
 	public static void main(String[] args) throws Exception {
 
 		Lista lista = new Lista();
+		Game g = new Game();
 
 		String entrada = bufferReader.readLine();
 
@@ -727,14 +821,13 @@ class Main {
 
 			String gameLine = Game.lerArquivoCsv(entrada);
 
-			Game g = new Game();
 			g.ler(gameLine);
 			lista.inserirFim(g);
 
 			entrada = bufferReader.readLine();
 		}
 
-		lista.sort();
+		// lista.sort();
 
 		// numero de operações
 		int numOp = Integer.parseInt(bufferReader.readLine());
@@ -743,7 +836,64 @@ class Main {
 
 		for (int i = 0; i < numOp; i++) {
 
-			//code
+			entrada = bufferReader.readLine();
+
+			
+			if (entrada.substring(0, 2).equals("II")) {
+				
+				entrada = entrada.substring(3, entrada.length());
+				System.out.println(entrada);
+				g.ler(pesquisarGame(entrada));
+
+				lista.inserirInicio(g);
+
+			}
+			if (entrada.substring(0, 2).equals("IF")) {
+
+				entrada = entrada.substring(3, entrada.length());
+				System.out.println(entrada);
+				g.ler(pesquisarGame(entrada));
+				lista.inserirFim(g);
+			}
+			if(entrada.substring(0, 2).equals("I*")) {
+				String aux = entrada.substring(3, 5);
+				entrada = entrada.substring(5, entrada.length());
+
+				System.out.println(entrada);
+				g.ler(pesquisarGame(entrada));
+				lista.inserir(g, Integer.parseInt(aux));
+			}
+			if(entrada.substring(0, 2).equals("RI")) {
+				entrada = entrada.substring(3, entrada.length());
+
+				System.out.println(entrada);
+				g.ler(pesquisarGame(entrada));
+				lista.removerInicio();
+			}
+			/*if(entrada.substring(0, 2).equals("RF")) {
+				entrada = entrada.substring(3, entrada.length());
+
+				System.out.println(entrada);
+				g.ler(pesquisarGame(entrada));
+				lista.removerFim();
+			}
+			if(entrada.substring(0, 2).equals("R*")) {
+				String aux2 = entrada.substring(3, 5);
+				entrada = entrada.substring(5, entrada.length());
+
+				System.out.println(entrada);
+				g.ler(pesquisarGame(entrada));
+				lista.remover(Integer.parseInt(aux2));
+			}
+			if(entrada.substring(0, 3).equals("RF*")) {
+				entrada = entrada.substring(5, entrada.length());
+
+				System.out.println(entrada);
+				g.ler(pesquisarGame(entrada));
+				lista.removerFim();
+			}*/
+
 		}
+		lista.imprimirLista();
 	}
 }
